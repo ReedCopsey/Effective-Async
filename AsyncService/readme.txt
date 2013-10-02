@@ -1,0 +1,1 @@
+This WCF Service connects to the local "FakeService" to compose multiple calls.  FakeService should be run prior to running this service.

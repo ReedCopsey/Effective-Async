@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="AsyncDemoStoreApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AsyncDemoStoreApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="buttonStart" Click="ButtonStart_OnClick" Grid.Row="0" Grid.Column="0" Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Click me to start</Button>
+        <Button x:Name="buttonEnd" IsEnabled="False" Grid.Row="0" Grid.Column="1" Margin="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">Click me next</Button>
+        <TextBlock x:Name="TextBlockStatus" Margin="20" Grid.Row="1" Grid.ColumnSpan="2" FontSize="30"/>
+
+        <TextBlock x:Name="TextBlockAsyncData" Margin="20" Grid.Row="2" Grid.ColumnSpan="2" FontSize="30"/>            
+        
+    </Grid>
+</Page>
