@@ -14,6 +14,6 @@ namespace AsyncService
     public interface ICompositeService
     {
         [OperationContract(Name="GetQuotes")]
-        Task<List<string>> GetQuotesAsync(int count);
+        List<string> GetQuotes(int count);
     }
 }

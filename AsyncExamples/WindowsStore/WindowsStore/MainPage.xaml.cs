@@ -70,33 +70,39 @@
 
         #region Pitfall: Async void
 
+        private string data;
+
         //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         //{
+        //    data = string.Empty;
         //    this.TextBlockAsyncData.Text = "Making request...";
-        //    var data = await this.GetDataAsync();
+        //    this.GetDataAsync();
+        //    await Task.Delay(1000);
         //    this.TextBlockAsyncData.Text = "Received data asynchronously: " + data;
         //}
 
-        //private async Task<string> GetDataAsync()
-        //{
-        //    using (FooService service = new FooService())
-        //    {
-        //        return await service.BarAsync();
-        //    }
-        //}
+        private async void GetDataAsync()
+        {
+            using (FooService service = new FooService())
+            {
+                data = await service.BarAsync();
+            }
+        }
         #endregion
 
         #region Pitfall: Async void lambda
-        //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
+        //private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         //{
         //    this.TextBlockAsyncData.Text = "Performing long running operation";
-        //    var time = await Utilities.TimeOperation(async () =>
+        //    var time = Utilities.TimeOperation(() =>
         //        {
         //            double value = 0.0;
         //            for (int i = 1; i < 50; ++i)
         //            {
         //                value += Math.Sqrt(i);
-        //                await ProcessData(value);
+        //                // This could be run with await...
+        //                // Should we change it?
+        //                ProcessData(value).Wait();
         //            }
         //        });
         //    this.TextBlockAsyncData.Text = "Operation completed in " + time.ToString();
@@ -112,13 +118,14 @@
         public MainPage()
         {
             this.InitializeComponent();
-            this.TextBlockAsyncData.Text = "Loading data asynchronously...";
+            // this.TextBlockAsyncData.Text = "Loading data asynchronously...";
         }
         
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             App app = App.Current as App;
-            this.TextBlockAsyncData.Text = "Loaded text: " + await app.AsyncData;
+            await Task.Delay(2000);
+            // this.TextBlockAsyncData.Text = "Loaded text: " + app.AsyncData;
         }
         #endregion
 

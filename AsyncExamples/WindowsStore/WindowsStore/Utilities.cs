@@ -8,10 +8,10 @@
     {
         #region TimeOperation
       
-        public static async Task<TimeSpan> TimeOperation(Func<Task> operation)
+        public static TimeSpan TimeOperation(Action operation)
         {
             var sw = Stopwatch.StartNew();
-            await operation();
+            operation();
             return sw.Elapsed;
         }
 
@@ -33,7 +33,7 @@
                     double value = 0.0;
                     for (int i = 1; i < 100000; ++i)
                     {
-                        await Task.Run(() => Parallel.Invoke(Work, Work, Work, Work)).ConfigureAwait(false);
+                        await Task.Run(() => Parallel.Invoke(Work, Work, Work, Work)); //.ConfigureAwait(false);
                         value += Math.Log10(i);
                     }
                 });
