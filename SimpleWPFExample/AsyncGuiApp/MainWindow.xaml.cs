@@ -42,12 +42,12 @@ namespace AsyncGuiApp
         }
 
         // How do we make this version asynchronous?
-        private void ButtonAsync_Click(object sender, RoutedEventArgs e)
+        private async void ButtonAsync_Click(object sender, RoutedEventArgs e)
         {
             this.Results.Clear();
             using (var client = new CompositeService.CompositeServiceClient())
             {
-                List<string> results = client.GetQuotes(5);
+                List<string> results = await client.GetQuotesAsync(5);
                 foreach (var result in results)
                     this.Results.Add(result);
             }

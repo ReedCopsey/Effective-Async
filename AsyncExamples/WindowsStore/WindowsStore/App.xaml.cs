@@ -24,15 +24,18 @@ namespace AsyncDemoStoreApp
     /// </summary>
     sealed partial class App : Application
     {
-        public string AsyncData { get; private set; }
+        public Task<string> AsyncData { get; private set; }
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
         
-        protected override async void OnLaunched(LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+
+            this.AsyncData = AsyncDemoStoreApp.Common.SuspensionManager.LoadStateInformationAsync();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -64,8 +67,6 @@ namespace AsyncDemoStoreApp
 
             // Ensure the current window is active
             Window.Current.Activate();
-
-            this.AsyncData = await AsyncDemoStoreApp.Common.SuspensionManager.LoadStateInformationAsync();
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)

@@ -8,10 +8,10 @@
     {
         #region TimeOperation
       
-        public static TimeSpan TimeOperation(Action operation)
+        public static async Task<TimeSpan> TimeOperationAsync(Func<Task> operation)
         {
             var sw = Stopwatch.StartNew();
-            operation();
+            await operation();
             return sw.Elapsed;
         }
 
@@ -19,12 +19,12 @@
 
         #region ContinueOnCapturedContext
 
-        public static async Task<TimeSpan> TimeOperationAsync(Func<Task> operation)
-        {
-            var sw = Stopwatch.StartNew();
-            await operation();
-            return sw.Elapsed;
-        }
+        //public static async Task<TimeSpan> TimeOperationAsync(Func<Task> operation)
+        //{
+        //    var sw = Stopwatch.StartNew();
+        //    await operation();
+        //    return sw.Elapsed;
+        //}
 
         public static Task<TimeSpan> PerformTimedWorkAsync()
         {
@@ -33,7 +33,7 @@
                     double value = 0.0;
                     for (int i = 1; i < 100000; ++i)
                     {
-                        await Task.Run(() => Parallel.Invoke(Work, Work, Work, Work)); //.ConfigureAwait(false);
+                        await Task.Run(() => Parallel.Invoke(Work, Work, Work, Work)).ConfigureAwait(continueOnCapturedContext: false);
                         value += Math.Log10(i);
                     }
                 });

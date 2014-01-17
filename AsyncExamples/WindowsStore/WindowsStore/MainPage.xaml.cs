@@ -18,25 +18,25 @@
     {
         #region Async demo
 
-        private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
-        {
-            buttonStart.Click -= this.ButtonStart_OnClick;
-            try
-            {
-                buttonStart.IsEnabled = false;
-                buttonEnd.IsEnabled = true;
-                this.TextBlockStatus.Text = "You clicked me.  Asynchronously waiting until you click second button!";
-                await OnButtonClickAsync(this.buttonEnd);
+        //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    buttonStart.Click -= this.ButtonStart_OnClick;
+        //    try
+        //    {
+        //        buttonStart.IsEnabled = false;
+        //        buttonEnd.IsEnabled = true;
+        //        this.TextBlockStatus.Text = "You clicked me.  Asynchronously waiting until you click second button!";
+        //        await OnButtonClickAsync(this.buttonEnd);
 
-                this.TextBlockStatus.Text = "Done!";
-            }
-            finally
-            {
-                buttonStart.IsEnabled = true;
-                buttonEnd.IsEnabled = false;
-                buttonStart.Click += this.ButtonStart_OnClick;
-            }
-        }
+        //        this.TextBlockStatus.Text = "Done!";
+        //    }
+        //    finally
+        //    {
+        //        buttonStart.IsEnabled = true;
+        //        buttonEnd.IsEnabled = false;
+        //        buttonStart.Click += this.ButtonStart_OnClick;
+        //    }
+        //}
 
         public static async Task OnButtonClickAsync(Button button)
         {
@@ -70,31 +70,31 @@
 
         #region Pitfall: Async void
 
-        private string data;
+        // private string data;
 
         //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         //{
         //    data = string.Empty;
         //    this.TextBlockAsyncData.Text = "Making request...";
-        //    this.GetDataAsync();
-        //    await Task.Delay(1000);
+        //    var data = await this.GetDataAsync();
+        //    //await Task.Delay(1000);
         //    this.TextBlockAsyncData.Text = "Received data asynchronously: " + data;
         //}
 
-        private async void GetDataAsync()
+        private async Task<string> GetDataAsync()
         {
             using (FooService service = new FooService())
             {
-                data = await service.BarAsync();
+                return await service.BarAsync();
             }
         }
         #endregion
 
         #region Pitfall: Async void lambda
-        //private void ButtonStart_OnClick(object sender, RoutedEventArgs e)
+        //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
         //{
         //    this.TextBlockAsyncData.Text = "Performing long running operation";
-        //    var time = Utilities.TimeOperation(() =>
+        //    var time = await Utilities.TimeOperationAsync(async () =>
         //        {
         //            double value = 0.0;
         //            for (int i = 1; i < 50; ++i)
@@ -102,7 +102,7 @@
         //                value += Math.Sqrt(i);
         //                // This could be run with await...
         //                // Should we change it?
-        //                ProcessData(value).Wait();
+        //                await ProcessData(value);
         //            }
         //        });
         //    this.TextBlockAsyncData.Text = "Operation completed in " + time.ToString();
@@ -118,14 +118,13 @@
         public MainPage()
         {
             this.InitializeComponent();
-            // this.TextBlockAsyncData.Text = "Loading data asynchronously...";
+            this.TextBlockAsyncData.Text = "Loading data asynchronously...";
         }
         
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             App app = App.Current as App;
-            await Task.Delay(2000);
-            // this.TextBlockAsyncData.Text = "Loaded text: " + app.AsyncData;
+            this.TextBlockAsyncData.Text = "Loaded text: " + await app.AsyncData;
         }
         #endregion
 
@@ -197,24 +196,24 @@
 
         #region Design for Async: ConfigureAwait
 
-        //private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    buttonStart.Click -= this.ButtonStart_OnClick;
-        //    try
-        //    {
-        //        buttonStart.IsEnabled = false;
-        //        this.TextBlockStatus.Text = "You clicked me.  Asynchronously working...";
-        //        var time = await Utilities.PerformTimedWorkAsync();
+        private async void ButtonStart_OnClick(object sender, RoutedEventArgs e)
+        {
+            buttonStart.Click -= this.ButtonStart_OnClick;
+            try
+            {
+                buttonStart.IsEnabled = false;
+                this.TextBlockStatus.Text = "You clicked me.  Asynchronously working...";
+                var time = await Utilities.PerformTimedWorkAsync();
 
-        //        this.TextBlockStatus.Text = "Completed in " + time.ToString();
-        //    }
-        //    finally
-        //    {
-        //        buttonStart.IsEnabled = true;
-        //        buttonEnd.IsEnabled = false;
-        //        buttonStart.Click += this.ButtonStart_OnClick;
-        //    }
-        //}
+                this.TextBlockStatus.Text = "Completed in " + time.ToString();
+            }
+            finally
+            {
+                buttonStart.IsEnabled = true;
+                buttonEnd.IsEnabled = false;
+                buttonStart.Click += this.ButtonStart_OnClick;
+            }
+        }
 
         #endregion
     }

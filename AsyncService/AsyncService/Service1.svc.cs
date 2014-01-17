@@ -12,13 +12,13 @@ namespace AsyncService
     public class CompositeService : ICompositeService
     {
         // Original/sync version
-        public List<string> GetQuotes(int count)
+        public async Task<List<string>> GetQuotesAsync(int count)
         {
             var results = new List<string>();
             using (var client = new QuestionService.QuestionServiceClient())
             {
                 for (int i = 0; i < count; ++i)
-                    results.Add(client.GetQuote());
+                    results.Add(await client.GetQuoteAsync());
             }
 
             return results;
